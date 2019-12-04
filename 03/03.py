@@ -1,9 +1,39 @@
+# Courtesy of
+# https://en.wikipedia.org/wiki/Line%E2%80%93line_intersection#Given_two_points_on_each_line
+def get_segment_intersection(l1, l2):
+    # Points
+    p1, p2 = l1
+    p3, p4 = l2
+    # Coords
+    x1, y1 = p1
+    x2, y2 = p2
+    x3, y3 = p3
+    x4, y4 = p4
+
+    denom = ((x1-x2)*(y3-y4)) - ((y1-y2)*(x3-x4))
+    if denom == 0:
+        return None
+
+    t = (((x1-x3)*(y3-y4)) - ((y1-y3)*(x3-x4))) / denom
+    u = -(((x1-x2)*(y1-y3)) - ((y1-y2)*(x1-x3))) / denom
+
+    if 0 <= t <= 1 and 0 <= u <= 1:
+        return (x1+t*(x2-x1), y1+t*(y2-y1))
+        # OR
+        # return (x3+u*(x4-x3), y3+u*(y4-y3))
+    else:
+        return None
+
+# Setup
+# -----
 with open('input') as f:
     wires = f.read().split()
 
 port = (0, 0)
 all_pairs_and_steps = []
 
+# Store line segments
+# -------------------
 for wire in wires:
     pos = port
     dirs = wire.split(',')
@@ -31,35 +61,11 @@ for wire in wires:
 
     all_pairs_and_steps.append(pairs_and_steps)
 
-# Courtesy of
-# https://en.wikipedia.org/wiki/Line%E2%80%93line_intersection#Given_two_points_on_each_line
-def get_segment_intersection(l1, l2):
-    # Points
-    p1, p2 = l1
-    p3, p4 = l2
-    # Coords
-    x1, y1 = p1
-    x2, y2 = p2
-    x3, y3 = p3
-    x4, y4 = p4
-
-    denom = ((x1-x2)*(y3-y4)) - ((y1-y2)*(x3-x4))
-    if denom == 0:
-        return None
-
-    t = (((x1-x3)*(y3-y4)) - ((y1-y3)*(x3-x4))) / denom
-    u = -(((x1-x2)*(y1-y3)) - ((y1-y2)*(x1-x3))) / denom
-
-    if 0 <= t <= 1 and 0 <= u <= 1:
-        return (x1+t*(x2-x1), y1+t*(y2-y1))
-        # OR
-        # return (x3+u*(x4-x3), y3+u*(y4-y3))
-    else:
-        return None
-
 a = all_pairs_and_steps[0]
 b = all_pairs_and_steps[1]
 
+# Find intersections
+# ------------------
 intersections_and_steps = []
 for i in range(len(a)):
     for j in range(len(b)):
