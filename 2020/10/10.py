@@ -34,8 +34,7 @@ succ = 1
 for i in range(1, len(diffs)):
     if diffs[i] == diffs[i - 1] == 1:
         succ += 1
-    else:
-        if succ > 1:
-            n *= arr[succ]
+    elif succ > 1:
+        n *= arr[succ]
         succ = 1
 print(n)
