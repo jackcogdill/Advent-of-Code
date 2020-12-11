@@ -24,7 +24,7 @@ while j < len(nums):
     s = sum(cont)
     if s > n:
         i += 1
-    elif s < n:
+    elif s < n or j - i < 2:
         j += 1
     else:
         print(min(cont) + max(cont))
