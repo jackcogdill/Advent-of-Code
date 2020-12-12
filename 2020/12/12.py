@@ -3,32 +3,47 @@ from math import cos, sin, pi
 with open('input') as f:
     instructions = f.read().splitlines()
 
-def update(d, s, coord):
-    return (coord[0] + d[0] * s, coord[1] + d[1] * s)
+def update(coord, d, s):
+    x, y = coord
+    dx, dy = d
+    return (
+        x + dx * s,
+        y + dy * s
+    )
 
-x, y = 0, 0
+def rotate(d, deg):
+    rad = deg * pi / 180
+    dx, dy = d
+    return (
+        dx * cos(rad) - dy * sin(rad),
+        dx * sin(rad) + dy * cos(rad)
+    )
+
+def manhattan(pos):
+    x, y = pos
+    return abs(x) + abs(y)
+
+# Part 1
+pos = 0, 0
 d = 1, 0
-
 for i in instructions:
     c = i[0]
     n = int(i[1:])
     if c == 'N':
-        x, y = update((0, 1), n, (x, y))
+        pos = update(pos, (0, 1), n)
     elif c == 'S':
-        x, y = update((0, -1), n, (x, y))
+        pos = update(pos, (0, -1), n)
     elif c == 'E':
-        x, y = update((1, 0), n, (x, y))
+        pos = update(pos, (1, 0), n)
     elif c == 'W':
-        x, y = update((-1, 0), n, (x, y))
+        pos = update(pos, (-1, 0), n)
     elif c == 'L':
-        n *= pi / 180
-        d = d[0] * cos(n) - d[1] * sin(n), d[0] * sin(n) + d[1] * cos(n)
+        d = rotate(d, n)
     elif c == 'R':
-        n *= pi / 180
-        d = d[0] * cos(-n) - d[1] * sin(-n), d[0] * sin(-n) + d[1] * cos(-n)
+        d = rotate(d, -n)
     elif c == 'F':
-        x, y = update(d, n, (x, y))
-print(int(abs(x) + abs(y)))
+        pos = update(pos, d, n)
+print(round(manhattan(pos)))
 
 # Part 2
 ship = 0, 0
@@ -37,19 +52,17 @@ for i in instructions:
     c = i[0]
     n = int(i[1:])
     if c == 'N':
-        way = update((0, 1), n, way)
+        way = update(way, (0, 1), n)
     elif c == 'S':
-        way = update((0, -1), n, way)
+        way = update(way, (0, -1), n)
     elif c == 'E':
-        way = update((1, 0), n, way)
+        way = update(way, (1, 0), n)
     elif c == 'W':
-        way = update((-1, 0), n, way)
+        way = update(way, (-1, 0), n)
     elif c == 'L':
-        n *= pi / 180
-        way = way[0] * cos(n) - way[1] * sin(n), way[0] * sin(n) + way[1] * cos(n)
+        way = rotate(way, n)
     elif c == 'R':
-        n *= pi / 180
-        way = way[0] * cos(-n) - way[1] * sin(-n), way[0] * sin(-n) + way[1] * cos(-n)
+        way = rotate(way, -n)
     elif c == 'F':
-        ship = ship[0] + way[0] * n, ship[1] + way[1] * n
-print(round(abs(ship[0]) + abs(ship[1])))
+        ship = update(ship, way, n)
+print(round(manhattan(ship)))
