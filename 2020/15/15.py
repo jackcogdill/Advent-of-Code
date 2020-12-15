@@ -12,10 +12,7 @@ def play(S):
 
     pp = 0
     for turn in range(turn + 1, S + 1):
-        if pp == 0:
-            pp = n = 0
-        else:
-            n = p - pp
+        n = p - pp if pp else 0
         pp = last.get(n, 0)
         p = last[n] = turn
 
