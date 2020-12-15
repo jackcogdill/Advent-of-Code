@@ -1,5 +1,3 @@
-from collections import defaultdict
-
 with open('input') as f:
     nums = list(map(int, f.read().split(',')))
 
