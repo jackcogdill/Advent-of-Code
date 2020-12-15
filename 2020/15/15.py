@@ -4,20 +4,19 @@ with open('input') as f:
     nums = list(map(int, f.read().split(',')))
 
 def play(S):
-    last = defaultdict(list)
+    last = defaultdict(lambda: (0, 0))
 
     for turn in range(1, len(nums) + 1):
         n = nums[turn - 1]
-        last[n] = last[n][-1:] + [turn]
+        last[n] = last[n][1], turn
 
-    prev = n
     for turn in range(turn + 1, S + 1):
-        if len(last[prev]) == 1:
+        prev = n
+        if last[prev][0] == 0:
             n = 0
         else:
             n = last[prev][1] - last[prev][0]
-        last[n] = last[n][-1:] + [turn]
-        prev = n
+        last[n] = last[n][1], turn
 
     return n
 
